@@ -10,7 +10,8 @@ const mockUser = { id: 1, username: 'Test user' }
 const mockTaskRepository = () => ({
   getTasks: jest.fn(),
   findOne: jest.fn(),
-  createTask: jest.fn()
+  createTask: jest.fn(),
+  delete: jest.fn()
 });
 
 describe('TasksService', () => {
@@ -66,7 +67,7 @@ describe('TasksService', () => {
   describe('createTask', () => {
     it('calls taskRepository.create() and returns the results', async () => {
       taskRepository.createTask.mockResolvedValue('someTask');
-      
+
       expect(taskRepository.createTask).not.toHaveBeenCalled();
       const createTaskDto = { title: 'Task test', desciption: 'Test Description'};
       const result = await tasksService.createTask(createTaskDto, mockUser);
@@ -74,4 +75,35 @@ describe('TasksService', () => {
       expect(result).toEqual('someTask');
     });
   });
+
+  describe('deleteTask', () => {
+    it('calls taskRepository.deleteTask() to delete a task', async () => {
+      taskRepository.delete.mockResolvedValue({ affected: 1 });
+      expect(taskRepository.delete).not.toHaveBeenCalled();
+      await tasksService.deleteTask(1, mockUser);
+      expect(taskRepository.delete).toHaveBeenCalledWith({ id: 1, userId: mockUser.id });
+    });
+
+    it('throws an error as task could not be found', () => {
+      taskRepository.delete.mockResolvedValue({ affected: 0 });
+      expect(tasksService.deleteTask(1, mockUser)).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('updateTaskStatus', () => {
+    it('updates a task status', async () => {
+      const save = jest.fn().mockReturnValue(true);
+      tasksService.getTaskById.mockResolvedValue({
+        status: TaskStatus.OPEN,
+        save
+      });
+
+      expect(tasksService.getTaskById).not.toHaveBeenCalled();
+      expect(save).not.toHaveBeenCalled();
+      const result = await tasksService.updateTaskStatus(1, TaskStatus.DONE, mockUser);
+      expect(tasksService.getTaskById).toHaveBeenCalled();
+      expect(save).toHaveBeenCalled();
+      expect(result.status).toEqual(TaskStatus.DONE);
+    })
+  })
 });
