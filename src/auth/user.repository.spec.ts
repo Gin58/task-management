@@ -31,14 +31,14 @@ describe('UserRepository', () => {
       expect(userRepository.signUp(mockCredentialsDto)).resolves.not.toThrow();
     });
 
-    it('throws a conflict exception as username already exists', () => {
+    it('throws a conflict exception as username already exists', async () => {
       save.mockRejectedValue({ code: '23505' });
-      expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(ConflictException);
+      await expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(ConflictException);
     });
 
-    it('throws a conflict exception as username already exists', () => {
+    it('throws a conflict exception as username already exists', async () => {
       save.mockRejectedValue({ code: '12341234' }); //unhandled error code
-      expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(InternalServerErrorException);
+      await expect(userRepository.signUp(mockCredentialsDto)).rejects.toThrow(InternalServerErrorException);
     });
   });
 });
