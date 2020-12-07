@@ -23,7 +23,7 @@ describe('User entity', () => {
       bcrypt.hash.mockReturnValue('wrongPassword');
       expect(bcrypt.hash).not.toHaveBeenCalled();
       const result = await user.validatePassword('wrongPassword');
-      expect(bcrypt.hash).toHaveBeenCalledWith('123456', 'testSalt');
+      expect(bcrypt.hash).toHaveBeenCalledWith('wrongPassword', 'testSalt');
       expect(result).toEqual(false); 
     });
   })
