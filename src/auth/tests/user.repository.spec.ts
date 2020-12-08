@@ -1,7 +1,7 @@
 import { ConflictException, InternalServerErrorException } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
-import { User } from "./user.entity";
-import { UserRepository } from "./user.repository";
+import { User } from "../user.entity";
+import { UserRepository } from "../user.repository";
 import * as bcrypt from 'bcrypt';
 
 

@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing'
-import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
-import { TaskStatus } from './task-status.enum';
-import { TaskRepository } from './task.repository';
-import { TasksService } from './tasks.service';
+import { GetTasksFilterDto } from '../dto/get-tasks-filter.dto';
+import { TaskStatus } from '../task-status.enum';
+import { TaskRepository } from '../task.repository';
+import { TasksService } from '../tasks.service';
 
 const mockUser = { id: 1, username: 'Test user' }
 
